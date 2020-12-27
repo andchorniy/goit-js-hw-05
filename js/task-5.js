@@ -1,26 +1,108 @@
-const products = [
-  { name: 'Радар', price: 1300, quantity: 4 },
-  { name: 'Сканер', price: 2700, quantity: 3 },
-  { name: 'Дроид', price: 400, quantity: 7 },
-  { name: 'Захват', price: 1200, quantity: 2 },
-];
+class Car {
+  /*
+   * Добавь статический метод `getSpecs(car)`,
+   * который принимает объект-машину как параметр и выводит
+   * в консоль значения свойств maxSpeed, speed, isOn, distance и price.
+   */
+  static getSpecs({ maxSpeed, speed, isON, distance, price}) {
+    console.log(`maxSpeed:${maxSpeed}, speed:${speed}, isOn:${isON}, distance:${distance}, price:${price}`)
+  }
+  /*
+   * Конструктор получает объект настроек.
+   *
+   * Добавь свойства будущеего экземпляра класса:
+   *  speed - текущая скорость, изначально 0
+   *  price - цена автомобиля
+   *  maxSpeed - максимальная скорость
+   *  isOn - заведен ли автомобиль, значения true или false. Изначально false
+   *  distance - общий киллометраж, изначально 0
+   */
+  constructor({ maxSpeed, speed = 0, isOn = false, distance = 0, price }) {
+    this.maxSpeed = maxSpeed;
+    this.speed = speed;
+    this.isON = isOn;
+    this.distance = distance;
+    this._price = price;
+  }
 
-const getAllPropValues = function(arr, prop) {
-  // твой код
-    let arrProp = [];
-    for (const product of arr) {
-        if (product[prop]) {
-            arrProp.push(product[prop]);
-        }
+  /*
+   * Добавь геттер и сеттер для свойства price,
+   * который будет работать с свойством цены автомобиля.
+   */
+  get price() {
+    return this._price;
+  }
+  set price(value) { 
+    this._price = value;
+  }
+
+  /*
+   * Добавь код для того чтобы завести автомобиль
+   * Записывает в свойство isOn значение true
+   */
+  turnOn() {
+    this.isON = true;
+  }
+
+  /*
+   * Добавь код для того чтобы заглушить автомобиль
+   * Записывает в свойство isOn значение false,
+   * и сбрасывает текущую скорость в 0
+   */
+  turnOff() {
+    this.isON = false;
+    this.speed = 0;
+  }
+
+  /*
+   * Добавялет к свойству speed полученное значение,
+   * при условии что результирующая скорость
+   * не больше чем значение свойства maxSpeed
+   */
+  accelerate(value) {
+    if (this.isON && (this.speed + value) <= this.maxSpeed) { 
+      this.speed += value;
     }
-    return arrProp;
-};
+  }
 
-/*
- * Вызовы функции для проверки работоспособности твоей реализации.
- */
-console.log(getAllPropValues(products, 'name')); // ['Радар', 'Сканер', 'Дроид', 'Захват']
+  /*
+   * Отнимает от свойства speed полученное значение,
+   * при условии что результирующая скорость не меньше нуля
+   */
+  decelerate(value) {
+    if (this.isON && (this.speed + value) >= 0) { 
+      this.speed -= value;
+    }
+  }
+  
 
-console.log(getAllPropValues(products, 'quantity')); // [4, 3, 7, 2]
+  /*
+   * Добавляет в поле distance киллометраж (hours * speed),
+   * но только в том случае если машина заведена!
+   */
+  drive(hours) {
+    if (this.isON) {
+      this.distance += hours * this.speed
+    }
+  }
+}
 
-console.log(getAllPropValues(products, 'category')); // []
+const mustang = new Car({ maxSpeed: 200, price: 2000 });
+
+mustang.turnOn();
+mustang.accelerate(50);
+mustang.drive(2);
+
+Car.getSpecs(mustang);
+// maxSpeed: 200, speed: 50, isOn: true, distance: 100, price: 2000
+
+mustang.decelerate(20);
+mustang.drive(1);
+mustang.turnOff();
+
+Car.getSpecs(mustang);
+// maxSpeed: 200, speed: 0, isOn: false, distance: 130, price: 2000
+
+console.log(mustang.price); // 2000
+mustang.price = 4000;
+console.log(mustang.price); // 4000

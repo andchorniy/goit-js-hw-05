@@ -1,21 +1,23 @@
-const apartment = {
-  imgUrl: 'https://via.placeholder.com/640x480',
-  descr: 'Просторная квартира в центре',
-  rating: 4.7,
-  price: 5000,
-  tags: ['premium', 'promoted', 'top', 'trusted'],
-  owner: {
-    name: 'Генри Сибола',
-    phone: '982-126-1588',
-    email: 'henry.carter@aptmail.com'
-  }
+const Account = function ({ login, email }) {
+  this.login = login;
+  this.email = email;
 };
+Account.prototype.getInfo = function() { 
+  console.log(`Login: ${this.login}, Email: ${this.email}`)
+}
 
-// Пиши код ниже этой строки
-apartment.area = 60;
-apartment.rooms = 3;
-apartment.location = {};
-apartment.location.country = 'Ямайка';
-apartment.location.city = 'Кингстон';
+console.log(Account.prototype.getInfo); // function
 
-console.table(apartment)
+const mango = new Account({
+  login: 'Mangozedog',
+  email: 'mango@dog.woof',
+});
+
+mango.getInfo(); // Login: Mangozedog, Email: mango@dog.woof
+
+const poly = new Account({
+  login: 'Poly',
+  email: 'poly@mail.com',
+});
+
+poly.getInfo(); // Login: Poly, Email: poly@mail.com
